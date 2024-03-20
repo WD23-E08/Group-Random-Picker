@@ -41,15 +41,14 @@ function RandomPicker() {
 
     useEffect(() => {
         if (state.isPlaying) {
-             const intervalId = setInterval(() => dispatch({ type: "pick" }), 60);
+             const intervalId = setInterval(() => dispatch({ type: "pick" }), 2000);
              setTimeout(() => {
                 clearInterval(intervalId);
                 dispatch({ type: "play" });
-            }, 2000);
+            }, 6000);
         }
     }, [state.isPlaying]);
-    
-    console.log(state.isPlaying);
+
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -57,7 +56,7 @@ function RandomPicker() {
             alert("Type something first !")
             return
         }
-        if (state.items.includes(name)) {
+        if (state.items.includes(name.toUpperCase())) {
             alert("Item already exists");
             return
         }
@@ -89,14 +88,19 @@ function RandomPicker() {
             <input type="text" name='name' value={name} placeholder='Search...' onChange={(e) => setName(e.target.value)}/>
             <button className='btn' type='submit'>+</button>
         </form>
+
         <ul>
         {!!state.items.length && state.items?.map((item, index) => (
             <li key={index}>
-            {item} <button className='dlt-btn' onClick={() => handleDelete(item)}>Delete</button>
+            {item} <button className='dlt-btn' onClick={() => handleDelete(item)}><i class="fa-solid fa-trash-can"></i></button>
           </li>
         ))}
         </ul>
-        <button className='play-btn' onClick={handlePlay} disabled={state.isPlaying}>Play</button>
+
+        <div className="play-reset-buttons">
+            <button className='play-btn' onClick={handlePlay} disabled={state.isPlaying}>Play</button>
+            <button className='reset-btn'>Reset</button>
+        </div>
     </>
   )
 }
