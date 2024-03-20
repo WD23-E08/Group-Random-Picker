@@ -2,45 +2,55 @@ import { useState, useReducer, useEffect } from 'react'
 import '../index.css'
 import React from 'react'
 
-const initialState = { items: [], isPlaying: false }
+const initialState = { 
+    items: [], 
+    isPlaying: false,
+    pickedItem: null
+}
+
 function reducer(state, action) {
     switch(action.type) {
-        case "add" :
-              return { ...state, items: [...state.items, action.payload.toUpperCase()] }
+        case "add" : {
+            return { ...state, items: [...state.items, action.payload.toUpperCase()] }
+        }
         case "delete" : {
             return {
                 items: state.items.filter((item) => item !== action.payload)
             }
         }
-        case "play" :
-            return {...state, isPlaying:!state.isPlaying }
-        case "pick" :
-            return state;
+        case "play" : {
+            return {...state, isPlaying: !state.isPlaying }
+        }
+        case "pick" : {
+            return {
+                ...state,
+                pickedItem: getRandomElement(state.items)
+            }
+        }
         default: return state;
     }
 }
+
 function getRandomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
+
 function RandomPicker() {
     const [ name, setName ] = useState("");
     const [ state, dispatch ] = useReducer(reducer, initialState);
+
     useEffect(() => {
-        let intervalId;
         if (state.isPlaying) {
-            if (state.items.length < 2) {
-                alert("Minimum 2 items required to play");
+             const intervalId = setInterval(() => dispatch({ type: "pick" }), 60);
+             setTimeout(() => {
+                clearInterval(intervalId);
                 dispatch({ type: "play" });
-            } else {
-                intervalId = setInterval(() => {
-                    dispatch({ type: "pick" });
-                }, 5000);
-            }
-        } else {
-            clearInterval(intervalId);
+            }, 2000);
         }
-        return () => clearInterval(intervalId);
-    }, [state.isPlaying, state.items]);
+    }, [state.isPlaying]);
+    
+    console.log(state.isPlaying);
+
     function handleSubmit(e) {
         e.preventDefault();
         if(!name) {
@@ -54,27 +64,27 @@ function RandomPicker() {
         dispatch({ type: "add", payload: name});
         setName("");
     }
+
     function handleDelete(item) {
         dispatch({ type: "delete", payload: item })
     }
+
     const handlePlay = () => {
+        if (state.items.length < 2) {
+            alert("Minimum 2 items required to play");
+            return;
+        }
         dispatch({ type: "play" });
     };
-    const pickRandomItem = () => {
-        if (state.isPlaying) {
-            const randomItem = getRandomElement(state.items);
-            return randomItem;
-        }
-        return null;
-    };
+
   return (
-    <>
-        <h1>Add Items and Pick One</h1>
-        {state.isPlaying && (
-                    <div>
-                        <h2>{pickRandomItem()}</h2>
-                    </div>
+    <>  
+        {state.pickedItem ? (
+            <h1>{state.pickedItem}</h1>
+            ) : (
+            <h1>Add Items and Pick One</h1>
         )}
+
         <form onSubmit={handleSubmit}>
             <input type="text" name='name' value={name} placeholder='Search...' onChange={(e) => setName(e.target.value)}/>
             <button className='btn' type='submit'>+</button>
