@@ -5,7 +5,7 @@ import React from 'react'
 const initialState = { 
     items: [], 
     isPlaying: false,
-    pickedItem: null
+    pickedItem: null,
 }
 
 function reducer(state, action) {
@@ -27,6 +27,10 @@ function reducer(state, action) {
                 pickedItem: getRandomElement(state.items)
             }
         }
+        case "reset" :{
+            localStorage.setItem('items', JSON.stringify([]));
+            return initialState;
+        }
         default: return state;
     }
 }
@@ -41,11 +45,11 @@ function RandomPicker() {
 
     useEffect(() => {
         if (state.isPlaying) {
-             const intervalId = setInterval(() => dispatch({ type: "pick" }), 2000);
+             const intervalId = setInterval(() => dispatch({ type: "pick" }), 60);
              setTimeout(() => {
                 clearInterval(intervalId);
                 dispatch({ type: "play" });
-            }, 6000);
+            }, 4000);
         }
     }, [state.isPlaying]);
 
@@ -76,6 +80,10 @@ function RandomPicker() {
         dispatch({ type: "play" });
     };
 
+    function handleReset() {
+        dispatch({ type: "reset" })
+    }
+
   return (
     <>  
         {state.pickedItem ? (
@@ -99,7 +107,7 @@ function RandomPicker() {
 
         <div className="play-reset-buttons">
             <button className='play-btn' onClick={handlePlay} disabled={state.isPlaying}>Play</button>
-            <button className='reset-btn'>Reset</button>
+            <button className='reset-btn' onClick={handleReset}>Reset</button>
         </div>
     </>
   )
