@@ -3,11 +3,13 @@ import { useState, useReducer, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import '../index.css';
+import { gif } from './Gif';
 
 const initialState = { 
     items: [], 
     isPlaying: false,
     pickedItem: null,
+    pickedGif: null
 }
 
 function reducer(state, action) {
@@ -26,7 +28,8 @@ function reducer(state, action) {
         case "pick" : {
             return {
                 ...state,
-                pickedItem: getRandomElement(state.items)
+                pickedItem: getRandomElement(state.items),
+                pickedGif: getRandomElement(gif)
             }
         }
         case "reset" :{
@@ -49,7 +52,7 @@ function RandomPicker() {
 
     useEffect(() => {
         if (state.isPlaying) {
-             const intervalId = setInterval(() => dispatch({ type: "pick" }), 60);
+             const intervalId = setInterval(() => dispatch({ type: "pick" }), 1000);
              setTimeout(() => {
                 clearInterval(intervalId);
                 dispatch({ type: "play" });
@@ -130,6 +133,14 @@ function RandomPicker() {
                     <div className="content">{modal.message}</div>
                 </div>
         </Popup>
+
+        <div className='gif'>
+                {state.pickedItem ? (
+                    <img src={state.pickedGif} alt="" />
+                ) : (
+                    <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmZrdnZkOGUwbnczcGpqOG1sOTBrcGltanJsb3o2NDJqY2Vvd2R2biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/juSCTzqDAV1Xq/giphy.gif" alt="" />
+                )}
+            </div>
     </>
   )
 }
