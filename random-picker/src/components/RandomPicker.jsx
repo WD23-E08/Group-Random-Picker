@@ -3,7 +3,7 @@ import '../index.css'
 import React from 'react'
 
 const initialState = { 
-    items: [], 
+    items: JSON.parse(localStorage.getItem("items")) || [], 
     isPlaying: false,
     pickedItem: null
 }
@@ -24,7 +24,7 @@ function reducer(state, action) {
         case "pick" : {
             return {
                 ...state,
-                pickedItem: getRandomElement(state.items)
+                pickedItem: getRandomElement("", state.items)
             }
         }
         default: return state;
@@ -49,6 +49,9 @@ function RandomPicker() {
         }
     }, [state.isPlaying]);
 
+    useEffect(() => {
+        localStorage.setItem("items", JSON.stringify(state.items));
+    }, [state.items])
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -92,7 +95,7 @@ function RandomPicker() {
         <ul>
         {!!state.items.length && state.items?.map((item, index) => (
             <li key={index}>
-            {item} <button className='dlt-btn' onClick={() => handleDelete(item)}><i class="fa-solid fa-trash-can"></i></button>
+            {item} <button className='dlt-btn' onClick={() => handleDelete(item)}><i className="fa-solid fa-trash-can"></i></button>
           </li>
         ))}
         </ul>
