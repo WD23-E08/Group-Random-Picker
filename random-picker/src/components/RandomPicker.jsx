@@ -6,7 +6,7 @@ import '../index.css';
 import { gif } from './Gif';
 
 const initialState = { 
-    items: [], 
+    items: JSON.parse(localStorage.getItem("items")) || [], 
     isPlaying: false,
     pickedItem: null,
     pickedGif: null
@@ -30,6 +30,7 @@ function reducer(state, action) {
                 ...state,
                 pickedItem: getRandomElement(state.items),
                 pickedGif: getRandomElement(gif)
+                pickedItem: getRandomElement("", state.items)
             }
         }
         case "reset" :{
@@ -59,6 +60,10 @@ function RandomPicker() {
             }, 4000);
         }
     }, [state.isPlaying]);
+
+    useEffect(() => {
+        localStorage.setItem("items", JSON.stringify(state.items));
+    }, [state.items])
 
     function showModal(message) {
         setModal({ open: true, message });
@@ -115,7 +120,7 @@ function RandomPicker() {
         <ul>
         {!!state.items.length && state.items?.map((item, index) => (
             <li key={index}>
-            {item} <button className='dlt-btn' onClick={() => handleDelete(item)}><i class="fa-solid fa-trash-can"></i></button>
+            {item} <button className='dlt-btn' onClick={() => handleDelete(item)}><i className="fa-solid fa-trash-can"></i></button>
           </li>
         ))}
         </ul>
