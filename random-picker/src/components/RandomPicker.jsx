@@ -82,7 +82,7 @@ function RandomPicker() {
     function handleSubmit(e) {
         e.preventDefault();
         if(!name) {
-            alert("Type something first !")
+            showModal("Type something first !")
             return
         }
         if (state.items.includes(name.toUpperCase())) {
@@ -100,7 +100,7 @@ function RandomPicker() {
 
     const handlePlay = () => {
         if (state.items.length < 2) {
-            alert("Minimum 2 items required to play");
+            showModal("Minimum 2 items required to play");
             return;
         }
         dispatch({ type: "play" });
