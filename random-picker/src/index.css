@@ -92,3 +92,13 @@ li {
   list-style: none;
   font-size: 1.3rem;
 }
+
+
+.gif{
+  margin: 1rem;
+  border-radius: 5px;
+}
+
+img{
+  border-radius: 5px;
+}
