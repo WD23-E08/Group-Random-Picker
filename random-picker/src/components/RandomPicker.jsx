@@ -1,11 +1,13 @@
-import { useState, useReducer, useEffect } from 'react'
-import '../index.css'
 import React from 'react'
+import { useState, useReducer, useEffect } from 'react';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import '../index.css';
 
 const initialState = { 
     items: JSON.parse(localStorage.getItem("items")) || [], 
     isPlaying: false,
-    pickedItem: null
+    pickedItem: null,
 }
 
 function reducer(state, action) {
@@ -27,6 +29,10 @@ function reducer(state, action) {
                 pickedItem: getRandomElement("", state.items)
             }
         }
+        case "reset" :{
+            localStorage.setItem('items', JSON.stringify([]));
+            return initialState;
+        }
         default: return state;
     }
 }
@@ -39,19 +45,29 @@ function RandomPicker() {
     const [ name, setName ] = useState("");
     const [ state, dispatch ] = useReducer(reducer, initialState);
 
+    const [modal, setModal] = useState({ open: false, message: '' });
+
     useEffect(() => {
         if (state.isPlaying) {
-             const intervalId = setInterval(() => dispatch({ type: "pick" }), 2000);
+             const intervalId = setInterval(() => dispatch({ type: "pick" }), 60);
              setTimeout(() => {
                 clearInterval(intervalId);
                 dispatch({ type: "play" });
-            }, 6000);
+            }, 4000);
         }
     }, [state.isPlaying]);
 
     useEffect(() => {
         localStorage.setItem("items", JSON.stringify(state.items));
     }, [state.items])
+
+    function showModal(message) {
+        setModal({ open: true, message });
+    }
+
+    function closeModal() {
+        setModal({ open: false, message: '' });
+    }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -60,7 +76,8 @@ function RandomPicker() {
             return
         }
         if (state.items.includes(name.toUpperCase())) {
-            alert("Item already exists");
+            // alert("Item already exists");
+            showModal("Item already exists");
             return
         }
         dispatch({ type: "add", payload: name});
@@ -78,6 +95,10 @@ function RandomPicker() {
         }
         dispatch({ type: "play" });
     };
+
+    function handleReset() {
+        dispatch({ type: "reset" })
+    }
 
   return (
     <>  
@@ -102,8 +123,17 @@ function RandomPicker() {
 
         <div className="play-reset-buttons">
             <button className='play-btn' onClick={handlePlay} disabled={state.isPlaying}>Play</button>
-            <button className='reset-btn'>Reset</button>
+            <button className='reset-btn' onClick={handleReset}>Reset</button>
         </div>
+
+        <Popup open={modal.open} closeOnDocumentClick onClose={closeModal}>
+                <div className="modal">
+                    <button className="close" onClick={closeModal}>
+                        &times;
+                    </button>
+                    <div className="content">{modal.message}</div>
+                </div>
+        </Popup>
     </>
   )
 }
