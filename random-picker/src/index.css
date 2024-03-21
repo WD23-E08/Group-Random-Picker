@@ -102,3 +102,37 @@ li {
 img{
   border-radius: 5px;
 }
+
+.popup-content {
+  letter-spacing: 2px;
+  border-radius: 10px;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(255, 0, 0);
+}
+
+.popup-overlay {
+  backdrop-filter: blur(10px);
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 1rem;
+}
+
+.content {
+  font-size: 1.2rem;
+  color: rgb(255, 255, 255);
+}
+
+.modal .close {
+  padding: 3px 8px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
