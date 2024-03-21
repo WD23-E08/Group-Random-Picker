@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import React from 'react'
 import { RandomPickerContext } from '../contexts/RandomPickerContext'
+import '../App.css'
 
 function Modals() {
     const { state, dispatch } = useContext(RandomPickerContext);
