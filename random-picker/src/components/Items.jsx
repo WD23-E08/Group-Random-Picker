@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react'
 import React from 'react'
+import '../App.css'
 import { RandomPickerContext } from '../contexts/RandomPickerContext'
 
 function Items() {

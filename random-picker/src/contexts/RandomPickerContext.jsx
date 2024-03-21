@@ -1,5 +1,6 @@
 import { createContext, useReducer } from "react";
 import { gif } from '../components/Gif.js';
+import '../App.css'
 
 export const RandomPickerContext = createContext();
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useContext, useState } from 'react';
 import '../index.css';
+import '../App.css'
 import { RandomPickerContext } from '../contexts/RandomPickerContext';
 import Form from './Form';
 import Items from './Items';
@@ -30,7 +31,7 @@ function RandomPicker() {
                 )}
         </div>
     </>
-  )
+  ) 
 }
 
 export default RandomPicker;
