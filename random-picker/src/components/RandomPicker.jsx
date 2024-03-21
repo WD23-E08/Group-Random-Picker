@@ -29,8 +29,12 @@ function reducer(state, action) {
             return {
                 ...state,
                 pickedItem: getRandomElement(state.items),
-                pickedGif: getRandomElement(gif)
-                pickedItem: getRandomElement("", state.items)
+            }
+        }
+        case "pickGif": {
+            return {
+                ...state,
+                pickedGif: getRandomElement(gif) 
             }
         }
         case "reset" :{
@@ -53,9 +57,11 @@ function RandomPicker() {
 
     useEffect(() => {
         if (state.isPlaying) {
-             const intervalId = setInterval(() => dispatch({ type: "pick" }), 1000);
+             const intervalId = setInterval(() => dispatch({ type: "pick" }), 100);
+             const intervalGif = setInterval(() => dispatch({ type: "pickGif"}), 200)
              setTimeout(() => {
                 clearInterval(intervalId);
+                clearInterval(intervalGif);
                 dispatch({ type: "play" });
             }, 4000);
         }
